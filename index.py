@@ -21,6 +21,13 @@ def read_my_excel(filename):
 
 #read csv file
 df_coemission = read_my_excel("co2_emission_updated.xls")
-
 #check initial dataframe
 print(df_coemission.head())
+
+#selecting required columns
+selected_features = ["Country Name", "Country Code", "1999", "2004", "2009", "2014", "2019"]
+#empty and null values are cleaned
+df_coemission = df_coemission.dropna(subset=selected_features)
+#copy cleaned required data
+data = df_coemission[selected_features].copy()
+print(data.head())
