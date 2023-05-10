@@ -6,6 +6,7 @@ Created on Wed May 10 16:34:04 2023
 """
 
 #required libraries
+import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -51,4 +52,14 @@ def choose_random_centroids(data, k):
 #function calling
 centroids = choose_random_centroids(data, 5)
 #check centre points
-print(centroids)
+#print(centroids)
+
+#step3 : claculate the distance for each data points from centroid using geometry distance formulae
+def find_labels(data, centroids):
+    """ This function is used to find out index of minimum  value of each centroid column """
+    distances = centroids.apply(lambda x: np.sqrt(((data - x) ** 2).sum(axis=1)))
+    return distances.idxmin(axis=1)
+
+cluster_labels = find_labels(data, centroids)
+print(cluster_labels)
+cluster_labels.value_counts()
