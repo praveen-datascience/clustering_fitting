@@ -26,7 +26,7 @@ df_coemission = read_my_excel("co2_emission_updated.xls")
 #print(df_coemission.head())
 
 #selecting required columns
-selected_features = ["1999", "2004", "2009", "2014", "2019"]
+selected_features = ["2000", "2001", "2002", "2003", "2004"]
 #empty and null values are cleaned
 df_coemission = df_coemission.dropna(subset=selected_features)
 #copy cleaned required data
@@ -91,7 +91,6 @@ iteration = 1
 
 while iteration < max_iterations and not centroids.equals(old_centroids):
     old_centroids = centroids
-    
     labels = find_labels(data, centroids)
     centroids = updated_centroids(data, cluster_labels, centroid_count)
     plot_clusters(data, cluster_labels, centroids, iteration)
