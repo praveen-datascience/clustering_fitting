@@ -50,7 +50,7 @@ def choose_random_centroids(data, k):
     return pd.concat(centroids, axis=1)
 
 #function calling
-centroids = choose_random_centroids(data, 5)
+centroids = choose_random_centroids(data, 3)
 #check centre points
 #print(centroids)
 
@@ -61,5 +61,39 @@ def find_labels(data, centroids):
     return distances.idxmin(axis=1)
 
 cluster_labels = find_labels(data, centroids)
-print(cluster_labels)
-cluster_labels.value_counts()
+#print(cluster_labels)
+#cluster_labels.value_counts()
+
+#step4 : update the centroids
+def updated_centroids(data, labels, k):
+    """ This function is used to update the centroids by taking geometric mean value """
+    centroids = data.groupby(cluster_labels).apply(lambda x: np.exp(np.log(x).mean())).T
+    return centroids
+
+def plot_clusters(data, labels, centroids, iteration):
+    """ This function is used to plot each point under each cluster """
+    #pca : used to visualize data in different dimension
+    pca = PCA(n_components=2)
+    data_2d = pca.fit_transform(data)
+    centroids_2d = pca.transform(centroids.T)
+    clear_output(wait=True)
+    plt.title(f'Iteration {iteration}')
+    plt.scatter(x=data_2d[:,0], y=data_2d[:,1], c=labels)
+    plt.scatter(x=centroids_2d[:,0], y=centroids_2d[:,1])
+    plt.show()
+
+max_iterations = 100
+centroid_count = 3
+
+centroids = choose_random_centroids(data, centroid_count)
+old_centroids = pd.DataFrame()
+iteration = 1
+
+while iteration < max_iterations and not centroids.equals(old_centroids):
+    old_centroids = centroids
+    
+    labels = find_labels(data, centroids)
+    centroids = updated_centroids(data, cluster_labels, centroid_count)
+    plot_clusters(data, cluster_labels, centroids, iteration)
+    iteration += 1
+    
