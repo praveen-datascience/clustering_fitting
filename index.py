@@ -49,15 +49,15 @@ df_data = df_data.dropna(subset=selected_features)
 data = df_data[selected_features].copy()
 print(data.head())
 
-
 #Use of curve_fit 
 x = data["co2_emission"]
 y = data["agri_machinery"]
 
 def linear(x,a,b):
+    """ This function is used to return linear values """
     return a*x+b
-
 def logarithmic(x,a,b):
+    """ This function is used to return log values """
     return a*np.log(x)+b
 
 constants = curve_fit(logarithmic,x,y)
@@ -66,7 +66,6 @@ b_fit = constants[0][1]
 fit = []
 for i in x:
     fit.append(logarithmic(i,a_fit,b_fit))
-
 plt.plot(x,y)
 plt.plot(x,fit)
 plt.grid()
@@ -74,8 +73,6 @@ plt.xlabel("Co2 Emission")
 plt.ylabel("Agri Machinery")
 plt.title("Co2 emission Vs Agri Machinery")
 plt.show()
-
-
 
 #kmeans-steps
 #step1 : scale the data so that no one column will not dominate other column
