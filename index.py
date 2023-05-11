@@ -4,7 +4,6 @@ Created on Wed May 10 16:34:04 2023
 
 @author: Anthonimuthu Praveenkumar
 """
-
 #required libraries
 import numpy as np
 import pandas as pd
@@ -14,6 +13,9 @@ from scipy.stats import pearsonr
 from sklearn.decomposition import PCA
 from IPython.display import clear_output
 from sklearn.cluster import KMeans
+import sklearn.cluster as cluster
+import sklearn.metrics as skmet
+
 
 def read_my_excel(filename):
     """ This function is used to read excel file and return dataframe """
@@ -21,16 +23,16 @@ def read_my_excel(filename):
     return excel_result
 
 #read csv file
-df_coemission = read_my_excel("co2_emission_updated.xls")
+df_data = read_my_excel("world_bank_data.xls")
 #check initial dataframe
-#print(df_coemission.head())
+print(df_data.head())
 
 #selecting required columns
-selected_features = ["2000", "2001", "2002", "2003", "2004"]
+selected_features = ["co2_emission", "agri_machinery", "forest_area"]
 #empty and null values are cleaned
-df_coemission = df_coemission.dropna(subset=selected_features)
+df_data = df_data.dropna(subset=selected_features)
 #copy cleaned required data
-data = df_coemission[selected_features].copy()
+data = df_data[selected_features].copy()
 #print(data.head())
 
 #kmeans-steps
@@ -50,7 +52,7 @@ def choose_random_centroids(data, k):
     return pd.concat(centroids, axis=1)
 
 #function calling
-centroids = choose_random_centroids(data, 3)
+centroids = choose_random_centroids(data, 5)
 #check centre points
 #print(centroids)
 
@@ -83,8 +85,7 @@ def plot_clusters(data, labels, centroids, iteration):
     plt.show()
 
 max_iterations = 100
-centroid_count = 3
-
+centroid_count = 5
 centroids = choose_random_centroids(data, centroid_count)
 old_centroids = pd.DataFrame()
 iteration = 1
@@ -95,4 +96,3 @@ while iteration < max_iterations and not centroids.equals(old_centroids):
     centroids = updated_centroids(data, cluster_labels, centroid_count)
     plot_clusters(data, cluster_labels, centroids, iteration)
     iteration += 1
-    
